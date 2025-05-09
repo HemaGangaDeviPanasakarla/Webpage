@@ -1,0 +1,48 @@
+.s1 {
+  height: 90.2vh;
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../images//bg.jpg'); */
+
+    background-image: 
+    url('../images//bg2.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* color: white; */
+  color: black;
+}
+
+.s2 {
+  padding: 2rem;
+}
+
+.s3 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.s4 {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.s5 {
+  font-size: 1.2rem;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .s3 {
+    font-size: 2.5rem;
+  }
+  
+  .s4{
+    font-size: 1.5rem;
+  }
+}
