@@ -21,6 +21,10 @@
   font-size: 1.5rem;
   font-weight: bold;
  }
+
+ .brand-text{
+  cursor: pointer;
+ }
  
  .menu {
   display: none;

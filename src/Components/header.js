@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
+
   const handleNavigation = (id) => {
     const pageList = ["homeSection", "productSection", "cartSection"];
     pageList.forEach((sectionId) => {
       const element = document.getElementById(sectionId);
       if (element) {
-   
         element.style.display = sectionId === id ? "block" : "none";
       }
     });
@@ -21,12 +21,14 @@ function Header() {
   return (
     <div className="header">
       <div className="brand">
-        <span className="brand-text">Andhra Sweets</span>
+        <span className="brand-text" onClick={() => handleNavigation("homeSection")}>Andhra Sweets</span>
       </div>
       <div className="menu" onClick={toggleMenu}>
         <span>☰</span>
       </div>
       <div className="links" id="navLinks">
+
+
         <span className="list" onClick={() => handleNavigation("homeSection")}>
           Home
         </span>

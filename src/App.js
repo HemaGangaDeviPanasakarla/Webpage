@@ -1,17 +1,17 @@
 
 import './App.css';
 import React from 'react';
-import Header from './Componets/header';
-import Footer from './Componets/Footer';
-import Products from './Componets/Product'
-import Home from './Componets/Home'
+import Header from './Components/header';
+import Footer from './Components/Footer';
+import Product from './Components/Product'
+import Home from './Components/Home'
 function App() {
   return (
     <div className="app">
       <Header />
       <main className="main-content">
         <Home  />
-        <Products />
+        <Product />
       </main>
       <Footer />
     </div>

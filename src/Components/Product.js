@@ -3,7 +3,7 @@ import "./Product.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
-function Products() {
+function Product() {
 
 
     //   // const products = [
@@ -75,4 +75,4 @@ function Products() {
  );
 }
 
-export default Products
+export default Product
