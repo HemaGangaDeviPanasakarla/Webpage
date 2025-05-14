@@ -5,7 +5,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 function Header() {
 
   const handleNavigation = (id) => {
-    const pageList = ["homeSection", "productSection", "cartSection"];
+    const pageList = ["homeSection", "ProductSection", "cartSection"];
     pageList.forEach((sectionId) => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -28,14 +28,9 @@ function Header() {
       </div>
       <div className="links" id="navLinks">
 
+        <a href="#homeSection" className="list"  onClick={() => handleNavigation('homeSection')}>Home</a>
+        <a href="#ProductSection" className="list"  onClick={() => handleNavigation('ProductSection')}>Products</a>
 
-        <span className="list" onClick={() => handleNavigation("homeSection")}>
-          Home
-        </span>
-        
-        <span className="list" onClick={() => handleNavigation("productSection")}>
-          Products
-        </span>
         <span className="list cart-icon">
           <FontAwesomeIcon icon={faShoppingCart} />
           <span id="cartCount" className="cart">

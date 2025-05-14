@@ -5,24 +5,6 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Product() {
 
-
-    //   // const products = [
-  //   { id: 1, image: "/images/111.jpg", title: "Gulab Jamm", price: "From ₹299" },
-  //   { id: 2, image: "/images/12.jpg", title: "Jalebi", price: "From ₹199" },
-  //   { id: 3, image: "/images/333.jpg", title: "Rasgulla", price: "From ₹350" },
-  //   { id: 4, image: "/images/444.jpg", title: "Kaju Katli", price: "From ₹400" },
-  //   { id: 5, image: "/images/15.jpg", title: "Mysore Pak", price: " From ₹400" },
-  //   { id: 6, image: "/images/16.jpg", title: "Barfi", price: "From ₹299" },
-  //   { id: 7, image: "/images/17.jpg", title: "Motichoor Laddu", price: "From ₹499" },
- //   { id: 8, image: "/images/89.jpg", title: "Pootharekulu", price: "From ₹450" },
-  //   { id: 9, image: "/images/999.jpg", title: "Kalakanda", price: "From ₹480" },
-  //   { id: 10, image: "/images/10.jpg", title: "Coconut Laddu", price: "From ₹290" },
-  //   { id: 11, image: "/images/1090.jpg", title: "Bobatallu", price: "From ₹440" },
- //   { id: 12, image: "/images/1956.webp", title: "Kajjikayalu", price: " From ₹590" },
-
-    
-  // ]
-
  const products = [
  { id: 1, image: "https://theartisticcook.com/wp-content/uploads/2024/10/Gulab-Jamun-with-Milk-Powder.jpg", title: "Gulab Jamm", price: "From ₹299" },
  { id: 2, image: "https://images.livemint.com/img/2020/12/01/original/Jalebi_Kachori_Varanasi_Mint_Lounge_1606804368858_1606804380338.jpg", title: "Jalebi", price: "From ₹199" },
@@ -38,23 +20,23 @@ function Product() {
  { id: 12, image: "https://www.yummyfoodrecipes.com/resources/picture/org/Tasty-Bellam-Kajjikayalu.jpg", title: "Kajjikayalu", price: " From ₹590" },
  ];
 
- const addToCart = (product) => {
- let cartCount = parseInt(localStorage.getItem("cartCount") || "0");
- cartCount++;
- 
- localStorage.setItem("cartCount", cartCount.toString());
 
- const cartCountElement = document.getElementById("cartCount");
- if (cartCountElement) {
- cartCountElement.textContent = cartCount.toString();
- cartCountElement.style.display = "flex";
- }
 
- alert(`${product.title} added to cart!`);
- };
+
+   let cartCount = 0;
+
+  const addToCart = (product) => {
+    cartCount++;
+    const cartCountElement = document.getElementById("cartCount");
+    if (cartCountElement) {
+      cartCountElement.textContent = cartCount.toString();
+      cartCountElement.style.display = "flex";
+    }
+    alert(`${product.title} added to cart!`);
+  };
 
  return (
- <div id="productSection" >
+ <div id="ProductSection" >
  <div className="p1">
  <h2 className="p2">Andhra Sweets</h2>
  <div className="p3">
