@@ -4,8 +4,10 @@ import './Footer.css';
 function Footer() {
   return (
     <div className="footer">
-      <span>© 2025 Andhra Sweets. All rights reserved.</span>
+      <span>© 2025 Our Styles. All rights reserved.</span>
     </div>
+    
+
   );
 }
 
