@@ -73,10 +73,8 @@ function Header({ toggleCart }) {
 
       <div className={`links ${MenuOpen ? "show" : ""}`} id="navLinks">
   
-         <Link to="home" className="list" >Home</Link> 
+         <Link to="/home" className="list" >Home</Link> 
          <Link to="/products"  className="list" >Products</Link>
-
-
         <span className="list cart-icon" onClick={toggleCart}>
           <FontAwesomeIcon icon={faShoppingCart} />
           {cartCount > 0 && <span className="cart">{cartCount}</span>}

@@ -67,7 +67,8 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #333;
+  background-color: aliceblue;
+  color: #333;
   padding: 1rem;
   flex-direction: column;
   z-index: 1000;

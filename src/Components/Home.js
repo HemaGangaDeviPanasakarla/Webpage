@@ -5,7 +5,7 @@ import './Home.css';
 
 function Home() {
   return (
-    <div id="homeSection">
+    <div id="home">
       <div className="s1">
         <div className="s2">
           <span className="s3">Welcome to Our Styles</span>
