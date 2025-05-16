@@ -3,6 +3,7 @@ import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 function Header({ toggleCart }) {
   const [MenuOpen, MenuClosed] = useState(false);
@@ -23,22 +24,40 @@ function Header({ toggleCart }) {
     MenuClosed(false);
   };
 
+  // useEffect(() => {
+  //   const storedCartCount = localStorage.getItem("cartCount");
+  //   if (storedCartCount) {
+  //     NewCount(Number(storedCartCount));
+  //   }
+
+  //   const handleCountChange = (event) => {
+  //     NewCount(event.detail);
+  //   };
+
+  //   window.addEventListener("cartCountChanged", handleCountChange);
+
+  //   return () => {
+  //     window.removeEventListener("cartCountChanged", handleCountChange);
+  //   };
+  // }, []);
+
+
   useEffect(() => {
-    const storedCartCount = localStorage.getItem("cartCount");
-    if (storedCartCount) {
-      NewCount(Number(storedCartCount));
-    }
+  const storedCartCount = localStorage.getItem("cartCount");
+  if (storedCartCount) {
+    NewCount(Number(storedCartCount));
+  }
 
-    const handleCountChange = (event) => {
-      NewCount(event.detail);
-    };
+  const handleCountChange = (event) => {
+    NewCount(event.detail); // Update cart count based on event data
+  };
 
-    window.addEventListener("cartCountChanged", handleCountChange);
+  window.addEventListener("cartCountChanged", handleCountChange);
 
-    return () => {
-      window.removeEventListener("cartCountChanged", handleCountChange);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener("cartCountChanged", handleCountChange);
+  };
+}, []);
 
   return (
     <div className="header">
@@ -53,13 +72,10 @@ function Header({ toggleCart }) {
       </div>
 
       <div className={`links ${MenuOpen ? "show" : ""}`} id="navLinks">
-        <a href="#homeSection" className="list" onClick={() => handleNavigation("homeSection")}>
-          Home
-        </a>
+  
+         <Link to="home" className="list" >Home</Link> 
+         <Link to="/products"  className="list" >Products</Link>
 
-        <a href="#ProductSection" className="list" onClick={() => handleNavigation("ProductSection")}>
-          Products
-        </a>
 
         <span className="list cart-icon" onClick={toggleCart}>
           <FontAwesomeIcon icon={faShoppingCart} />

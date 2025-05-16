@@ -112,7 +112,7 @@
    }
 
    .addcart:hover{
-    background-color:  #c7c6c6;;
+    background-color:  #c7c6c6;
    }
    
    .cartbutton {
@@ -184,7 +184,7 @@
   padding-left: 45px;
   
 }
-.search input:focus {
+.input:focus {
   border: 2px solid #777; 
   background-color: #f0f8ff; 
 }
@@ -198,12 +198,9 @@
   font-size: 1.1rem;
 }
 
-
-
-
-
-
-
+.side{
+  padding-left: 180px;
+}
 
 .no-results {
   padding: 20px 30px;

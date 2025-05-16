@@ -1,17 +1,16 @@
+
+
 import "./Product.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-
-
-import { faCartPlus,faSearch} from "@fortawesome/free-solid-svg-icons";
-
+import { useEffect, useState} from "react"; 
+import { faCartPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 function Product() {
   const [products, setProducts] = useState([]);
-  const [search, SearchValue] = useState("");
+  const [search, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  
+
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -26,6 +25,7 @@ function Product() {
         }));
         setProducts(apiData);
         setIsLoading(false);
+       
       })
       .catch(err => {
         toast.error("Failed to load products.");
@@ -33,88 +33,72 @@ function Product() {
       });
   }, []);
 
-  const handleAddToCart = (product) => {
+  const filteredProducts = products.filter(product =>
+    product.title.toLowerCase().includes(search.toLowerCase())
+  );
 
+  const handleAddToCart = (product) => {
     let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     const index = cartItems.findIndex(item => item.id === product.id);
 
     if (index !== -1) {
       toast.info(`Item is already in Your cart`);
-    } 
-    else {
+    } else {
       cartItems.push({ ...product, quantity: 1 });
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
- 
       const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
       localStorage.setItem("cartCount", cartCount);
-
 
       const cartCountChangedEvent = new CustomEvent("cartCountChanged", { detail: cartCount });
       window.dispatchEvent(cartCountChangedEvent);
 
-  
       toast.success(`Item added to cart`);
     }
   };
 
-
-  const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes(search.toLowerCase()) ||
-    product.category.toLowerCase().includes(search.toLowerCase())
-  );
-  
-
-
   return (
-  <div id="ProductSection">
-    <div className="p1">
-      <h2 className="p2">Our Styles -Fashion that speaks for you</h2>
+    <div id="ProductSection">
+      <div className="p1">
+        <h2 className="p2">Our Styles - Fashion that speaks for you</h2>
 
-      <div className="search">
-        <FontAwesomeIcon icon={faSearch} className="icon" />
-        <input
-          className="input"
-          type="search"
-         placeholder="Search products..."
-        autoFocus={true}
-         value={search}
-         onChange={e => SearchValue(e.target.value)}
-          ref={(input) => input && input.focus()}
-        />
-
-      </div>
-
-      {isLoading && <div>Loading...</div>}
-
-      {!isLoading && (
-        <div className="p3">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
-              <div key={product.id} className="p4">
-                <img src={product.image} alt={product.title} className="p5" />
-                <span className="p6">{product.title}</span>
-                <span className="pp">Rs.{product.price}</span>
-                <button className="addcart" onClick={() => handleAddToCart(product)}>
-                  <FontAwesomeIcon icon={faCartPlus} className="cartbutton" />
-                  <h6>Add to Cart</h6>
-                </button>
-              </div>
-            ))
-          ) : (
-            <div className="no-results">
-             <p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sorry, no results found! </p>
-              <p>Please check the spelling or try searching for something else.</p>
-           
-            </div>
-          )}
+        <div className="search">
+          <FontAwesomeIcon icon={faSearch} className="icon" />
+          <input
+            className="input"
+            type="search"
+            placeholder="Search products..."
+            value={search}
+            onChange={e => setSearchValue(e.target.value)}
+            autoFocus
+          />
         </div>
-      )}
-    </div>
-  </div>
-);
 
+        {!isLoading && (
+          <div className="p3">
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map(product => (
+                <div key={product.id} className="p4">
+                  <img src={product.image} alt={product.title} className="p5" />
+                  <span className="p6">{product.title}</span>
+                  <span className="pp">Rs.{product.price}</span>
+                  <button className="addcart" onClick={() => handleAddToCart(product)}>
+                    <FontAwesomeIcon icon={faCartPlus} className="cartbutton" />
+                    <h6>Add to Cart</h6>
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="no-results">
+                <p className="side">Sorry, no results found!</p>
+                <p>Please check the spelling or try searching for something else.</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Product;
