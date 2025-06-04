@@ -13,33 +13,6 @@ function Header({ toggleCart }) {
     MenuClosed(!MenuOpen);
   };
 
-  const handleNavigation = (id) => {
-    const pageList = ["homeSection", "ProductSection"];
-    pageList.forEach((sectionId) => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.style.display = sectionId === id ? "block" : "none";
-      }
-    });
-    MenuClosed(false);
-  };
-
-  // useEffect(() => {
-  //   const storedCartCount = localStorage.getItem("cartCount");
-  //   if (storedCartCount) {
-  //     NewCount(Number(storedCartCount));
-  //   }
-
-  //   const handleCountChange = (event) => {
-  //     NewCount(event.detail);
-  //   };
-
-  //   window.addEventListener("cartCountChanged", handleCountChange);
-
-  //   return () => {
-  //     window.removeEventListener("cartCountChanged", handleCountChange);
-  //   };
-  // }, []);
 
 
   useEffect(() => {
@@ -49,7 +22,7 @@ function Header({ toggleCart }) {
   }
 
   const handleCountChange = (event) => {
-    NewCount(event.detail); // Update cart count based on event data
+    NewCount(event.detail);
   };
 
   window.addEventListener("cartCountChanged", handleCountChange);
@@ -62,8 +35,8 @@ function Header({ toggleCart }) {
   return (
     <div className="header">
       <div className="brand">
-        <span className="brand-text" onClick={() => handleNavigation("homeSection")}>
-          Our Styles
+        <span className="brand-text">  <Link to="/home" className="list" >   Our Styles</Link> 
+       
         </span>
       </div>
 
