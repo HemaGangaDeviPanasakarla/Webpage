@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import {setOrderDetails, clearCart } from '../context/Actions/CartActions';
 import './CheckOut.css';
 
 function Checkout() {
-  const [cartItems, setCartItems] = useState([]);
+  const cartItems = useSelector((state) => state.cart.checkOutItems);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const nameRef = useRef(null);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,25 +19,18 @@ function Checkout() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderConfirmed, setOrderConfirmed] = useState(false); 
-
-  const navigate = useNavigate();
-  const nameRef = useRef(null);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    setCartItems(storedItems);
-
-    if (nameRef.current) {
-      nameRef.current.focus();
-    }
-
-    if (storedItems.length === 0) {
+    if (cartItems.length === 0) {
       toast.error("Your cart is empty!");
       navigate('/products');
     }
 
-  }, [navigate]);
+    if (nameRef.current) {
+      nameRef.current.focus();
+    }
+  }, [cartItems, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,25 +47,15 @@ function Checkout() {
     }
   };
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!isValidEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
-    }
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!isValidEmail(formData.email)) newErrors.email = 'Invalid email address';
+    if (!formData.address.trim()) newErrors.address = 'Address is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -76,7 +65,6 @@ function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) {
       toast.error("Please fill in all required fields correctly");
       return;
@@ -84,55 +72,40 @@ function Checkout() {
 
     setIsSubmitting(true);
 
-    try
-     {
-      await new Promise(resolve => setTimeout(resolve, 1500)); 
-      localStorage.removeItem("cartItems");
-      localStorage.setItem("cartCount", "0");
-
-      const cartCountChangedEvent = new CustomEvent("cartCountChanged", { detail: 0 });
-      window.dispatchEvent(cartCountChangedEvent);
-
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      dispatch(setOrderDetails(formData));
       toast.success("Thank you! Your order has been placed successfully", {
         autoClose: 4000,
-         onClose: () => {
-        navigate('/home')
-    }
+        onClose: () => {
+          dispatch(clearCart()); 
+          navigate('/home');
+        }
       });
- 
-      setOrderConfirmed(true); 
 
-    } 
-    
-    catch (error) {
+      setOrderConfirmed(true);
+    } catch (error) {
       toast.error("Something went wrong. Please try again.");
-    } 
-    
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };
 
-
   if (orderConfirmed) {
-    console.log(orderConfirmed)
     return (
       <div className="checkout">
-        <br/> <br /> <br/>  <br/> <br /> <br/>
+        <br /> <br /> <br /> <br />
         <div className="confirmation">
           <h2>Order Delivered!</h2>
           <p><strong>Name:</strong> {formData.name}</p>
           <p><strong>Email:</strong> {formData.email}</p>
           <p><strong>Address:</strong> {formData.address}</p>
           <p><strong>Payment Method:</strong> {formData.paymentOption}</p>
-          {/* <p><strong>Total Items:</strong> {cartItems.length}</p> */}
           <p><strong>Total Amount:</strong> Rs.{total.toFixed(2)}</p>
-         
         </div>
       </div>
     );
   }
-
 
   return (
     <div className="checkout">
@@ -211,11 +184,10 @@ function Checkout() {
               value={formData.paymentOption}
               onChange={handleInputChange}
             >
-              <option value="select any option">select any option</option>
-            <option value="Phone Pay">Phone Pay</option>
+              <option value="">Select any option</option>
+              <option value="Phone Pay">Phone Pay</option>
               <option value="Gpay">Gpay</option>
               <option value="Cash on Delivery">Cash on Delivery</option>
-        
             </select>
           </div>
 
@@ -229,13 +201,12 @@ function Checkout() {
             </button>
             <button
               type="submit"
-             className="button1"
+              className="button1"
             >
               {isSubmitting ? 'Processing...' : `Place Order (Rs.${total.toFixed(2)})`}
             </button>
           </div>
         </form>
-        
       </div>
     </div>
   );

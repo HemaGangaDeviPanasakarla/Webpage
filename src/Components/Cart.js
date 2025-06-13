@@ -1,67 +1,44 @@
-
-
-
-
 import "./Cart.css";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback } from "react";
 import { FaTimes, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromCart, updateCartItem, buyProduct } from '../context/Actions/CartActions'; 
 
 function Cart({ isOpen, onClose }) {
-  const [cartItems, setCartItems] = useState([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    setCartItems(storedItems);
-  }, [isOpen]);
-
-  const calculateCartCount = (items) =>
-    items.reduce((sum, item) => sum + item.quantity, 0);
-
-  const updateCart = useCallback((items) => {
-    const newCount = calculateCartCount(items);
-    localStorage.setItem("cartItems", JSON.stringify(items));
-    localStorage.setItem("cartCount", newCount);
-    setCartItems(items);
-
-    const cartCountChangedEvent = new CustomEvent("cartCountChanged", {
-      detail: newCount,
-    });
-    window.dispatchEvent(cartCountChangedEvent);
-  }, []);
+  const items = useSelector((state) => state.cart.items);
 
   const increment = useCallback((id) => {
-    const updated = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    updateCart(updated);
-  }, [cartItems, updateCart]);
+    const item = items.find(item => item.id === id);
+    if (item) {
+      dispatch(updateCartItem(id, item.quantity + 1));
+    }
+  }, [items, dispatch]);
+
+  
 
   const decrement = useCallback((id) => {
-    const updated = cartItems.map((item) =>
-      item.id === id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    );
-    updateCart(updated);
-  }, [cartItems, updateCart]);
+    const item = items.find(item => item.id === id);
+    if (item && item.quantity > 1) {
+      dispatch(updateCartItem(id, item.quantity - 1));
+    }
+  }, [items, dispatch]);
 
   const removeItem = useCallback((id) => {
-    const updated = cartItems.filter((item) => item.id !== id);
-    updateCart(updated);
+    dispatch(removeFromCart(id));
     toast.info("Item removed from cart", { autoClose: 1500 });
-  }, [cartItems, updateCart]);
-
-
+  }, [dispatch]);
 
   const goToCheckout = () => {
-    onClose();
-    navigate("/checkOut");
+    dispatch(buyProduct(items)); 
+    onClose(); 
+    navigate("/checkout"); 
   };
 
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className={`c1 ${isOpen ? "open" : ""}`}>
@@ -76,14 +53,14 @@ function Cart({ isOpen, onClose }) {
       <hr />
       <br /><br />
 
-      {cartItems.length === 0 ? (
+      {items.length === 0 ? (
         <div className="emptycart">
           <p>No Product in the Cart</p>
         </div>
       ) : (
         <>
           <div className="c3">
-            {cartItems.map((item) => (
+            {items.map((item) => (
               <div key={item.id} className="item">
                 <img src={item.image} alt={item.title} />
                 <div>
