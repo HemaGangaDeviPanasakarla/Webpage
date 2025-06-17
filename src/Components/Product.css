@@ -48,6 +48,7 @@
   border: 2px solid #ddd;
   outline: none;
   transition: all 0.3s ease;
+    border-radius: 6px;
 }
 
 .input:focus {

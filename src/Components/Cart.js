@@ -1,44 +1,13 @@
 import "./Cart.css";
-import { useCallback } from "react";
 import { FaTimes, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateCartItem, buyProduct } from '../context/Actions/CartActions'; 
-
+import { calculateCartTotal } from '../utils/cartTotal'
+import { CartActions } from "../hooks/CartActions";
 function Cart({ isOpen, onClose }) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const items = useSelector((state) => state.cart.items);
-
-  const increment = useCallback((id) => {
-    const item = items.find(item => item.id === id);
-    if (item) {
-      dispatch(updateCartItem(id, item.quantity + 1));
-    }
-  }, [items, dispatch]);
-
+  const {items,increment,decrement,removeItem,checkout,loading}=CartActions();
+  const total =calculateCartTotal(items)
   
-
-  const decrement = useCallback((id) => {
-    const item = items.find(item => item.id === id);
-    if (item && item.quantity > 1) {
-      dispatch(updateCartItem(id, item.quantity - 1));
-    }
-  }, [items, dispatch]);
-
-  const removeItem = useCallback((id) => {
-    dispatch(removeFromCart(id));
-    toast.info("Item removed from cart", { autoClose: 1500 });
-  }, [dispatch]);
-
-  const goToCheckout = () => {
-    dispatch(buyProduct(items)); 
-    onClose(); 
-    navigate("/checkout"); 
-  };
-
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className={`c1 ${isOpen ? "open" : ""}`}>
@@ -89,9 +58,10 @@ function Cart({ isOpen, onClose }) {
             <br /> <br /> <br />
             <button
               className="buybutton"
-              onClick={goToCheckout}
+              onClick={()=>checkout(onClose,navigate) }
+              disabled={loading}
             >
-              Buy
+          {loading ? "Processing..." :"Buy"}
             </button>
           </div>
         </>

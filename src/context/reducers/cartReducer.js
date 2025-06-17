@@ -4,7 +4,7 @@ const initialState = {
   items: [],
   count: 0,
   checkOutItems: [],
-   orderDetails: {},
+  orderDetails: {},
 };
 
 export const cartReducer = (state = initialState, { type, payload }) => {
